@@ -4,10 +4,14 @@
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
+    "@prisma/adapter-d1": "^5.12.1",
+    "@prisma/client": "^5.12.1",
     "hono": "^4.2.3"
   },
   "devDependencies": {
+    "@cloudflare/ai": "^1.1.0",
     "@cloudflare/workers-types": "^4.20240405.0",
+    "prisma": "^5.12.1",
     "wrangler": "^3.47.0"
   }
 }
