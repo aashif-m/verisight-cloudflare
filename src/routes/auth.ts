@@ -62,11 +62,28 @@ app.post("/login", async (c) => {
         username: user.username,
         exp: Math.floor(Date.now() / 1000) + 86400 * 30,
     };
-    
+
     const token = await jwt.sign(payload, c.env.JWT_SECRET);
 
     c.status(200);
     return c.json({ message: "Logged in", token });
+});
+
+app.get("/validate", async (c) => {
+    const token = c.req.header("Authorization");
+    if (!token) {
+        c.status(401);
+        return c.json({ message: "No token provided" });
+    }
+
+    try {
+        const payload = await jwt.verify(token, c.env.JWT_SECRET);
+        c.status(200);
+        return c.json({ message: "Token is valid", payload });
+    } catch (e) {
+        c.status(401);
+        return c.json({ message: "Invalid token" });
+    }
 });
 
 export default app;
