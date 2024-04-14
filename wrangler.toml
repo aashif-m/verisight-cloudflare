@@ -16,7 +16,7 @@ node_compat = true
 [[d1_databases]]
 binding = "DB"
 database_name = "verisight-db"
-database_id = "61624db1-85cb-4f9e-89cb-dad3a25fd377"
+database_id = "54963747-8c5b-4be1-935a-64d5977ef94d"
 
 [ai]
 binding = "AI"

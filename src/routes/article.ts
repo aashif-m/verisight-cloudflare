@@ -20,13 +20,15 @@ app.put("/", async (c) => {
     const prisma = new PrismaClient({ adapter });
 
     let article = await prisma.article.findUnique({ where: { link } });
+    //cast publishedTime to Date and time format
+    let publishedTimeDate = new Date(publishedTime);
 
     if (!article) {
         article = await prisma.article.create({
             data: {
                 title: title,
                 link: link,
-                publishedTime: publishedTime
+                publishedTime: publishedTimeDate
             }
         });
     } else {

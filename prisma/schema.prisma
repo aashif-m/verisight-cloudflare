@@ -15,7 +15,7 @@ model Article {
   id            Int    @id @default(autoincrement())
   link          String @unique
   title         String
-  publishedTime String
+  publishedTime DateTime
   notes         Note[]
 }
 

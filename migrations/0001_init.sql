@@ -1,10 +1,10 @@
--- Migration number: 0001 	 2024-04-14T03:04:27.907Z
+-- Migration number: 0001 	 2024-04-14T18:37:51.867Z
 -- CreateTable
 CREATE TABLE "Article" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "link" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "publishedTime" TEXT NOT NULL
+    "publishedTime" DATETIME NOT NULL
 );
 
 -- CreateTable
