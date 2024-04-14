@@ -52,6 +52,17 @@ app.post("/", async (c) => {
         return c.json({ message: "User not found" });
     }
 
+    const noteExists = await prisma.note.findFirst({
+        where: {
+            content: note,
+        }
+    });
+
+    if (noteExists) {
+        c.status(400);
+        return c.json({ message: "Note already exists" });
+    }
+
     const newNote = await prisma.note.create({
         data: {
             articleId: article.id,
