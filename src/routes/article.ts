@@ -19,19 +19,26 @@ app.put("/", async (c) => {
     const adapter = new PrismaD1(c.env.DB);
     const prisma = new PrismaClient({ adapter });
 
-    const article = prisma.article.upsert({
-        where: { link },
-        create: {
-            title: title,
-            link: link,
-            publishedTime: publishedTime
-        },
-        update: {
-            title: title,
-            link: link,
-            publishedTime: publishedTime
-        }
-    });
+    let article = await prisma.article.findUnique({ where: { link } });
+
+    if (!article) {
+        article = await prisma.article.create({
+            data: {
+                title: title,
+                link: link,
+                publishedTime: publishedTime
+            }
+        });
+    } else {
+        article = await prisma.article.update({
+            where: { link },
+            data: {
+                title: title,
+                link: link,
+                publishedTime: publishedTime
+            }
+        });
+    }
 
     c.status(200);
     return c.json({ message: "Article added", article: article });
