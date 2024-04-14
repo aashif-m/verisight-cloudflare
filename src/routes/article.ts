@@ -37,4 +37,11 @@ app.put("/", async (c) => {
     return c.json({ message: "Article added", article: article });
 });
 
+app.get("/whitelist", async (c) => {
+    const whitelist = ["www.bbc.com", "www.dailymirror.lk"];
+
+    c.status(200);
+    return c.json({ whitelist });
+});
+
 export default app;

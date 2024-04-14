@@ -32,10 +32,10 @@ app.post("/", async (c) => {
             content:
                 `Given a news headline and its corresponding body text, return one of the following values:
 
-          1. "consistent" - if the body text is consistent with the headline.
-          2. "inconsistent" - if the body text is inconsistent with the headline.
+          1. "congruent" - if the body text is congruent with the headline.
+          2. "incongruent" - if the body text is incongruent with the headline.
           
-          Remember, your response should only be the value: "consistent" or "inconsistent", without any additional information or analysis.`,
+          Remember, your response should only be the value: "congruent" or "incongruent", without any additional information or analysis.`,
         },
         {
             role: "user",
