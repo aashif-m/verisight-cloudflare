@@ -64,16 +64,14 @@ app.post("/", async (c) => {
     return c.json({ message: "Note added", note: newNote });
 });
 
-app.get("/:link", async (c) => {
-    const link = c.req.param("link");
+app.get("/:id", async (c) => {
+    const id = Number(c.req.param("id"));
     const adapter = new PrismaD1(c.env.DB);
     const prisma = new PrismaClient({ adapter });
-    const payload = c.get('jwtPayload');
-    const username = payload.username;
 
     const article = await prisma.article.findUnique({
         where: {
-            link: link,
+            id: id,
         },
     });
 
