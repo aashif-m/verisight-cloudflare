@@ -18,6 +18,11 @@ app.post("/register", async (c) => {
 
     const hashedPassword = await hashPassword(password);
 
+    if (await prisma.user.findUnique({ where: { username: username } })) {
+        c.status(409);
+        return c.json({ message: "User already exists" });
+    }
+
     const user = await prisma.user.create({
         data: {
             username: username,

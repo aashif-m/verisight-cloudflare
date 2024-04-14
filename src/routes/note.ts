@@ -68,6 +68,8 @@ app.get("/:link", async (c) => {
     const link = c.req.param("link");
     const adapter = new PrismaD1(c.env.DB);
     const prisma = new PrismaClient({ adapter });
+    const payload = c.get('jwtPayload');
+    const username = payload.username;
 
     const article = await prisma.article.findUnique({
         where: {
@@ -93,6 +95,36 @@ app.get("/:link", async (c) => {
 
     c.status(200);
     return c.json(notes);
+});
+
+app.get("/featured/:link", async (c) => {
+    const link = c.req.param("link");
+    const adapter = new PrismaD1(c.env.DB);
+    const prisma = new PrismaClient({ adapter });
+    const article = await prisma.article.findUnique({
+        where: {
+            link: link,
+        },
+    });
+
+    if (!article) {
+        c.status(404);
+        return c.json({ message: "Article not found" });
+    }
+
+    const featuredNote = await prisma.note.findFirst({
+        where: {
+            articleId: article.id,
+        },
+        orderBy: {
+            noteVotes: {
+                _count: "desc",
+            },
+        }
+    });
+
+    c.status(200);
+    return c.json(featuredNote);
 });
 
 app.get("/user/", async (c) => {
