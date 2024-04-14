@@ -4,8 +4,16 @@ import incongruence from './routes/incongruence'
 import crosscheck from './routes/crosscheck';
 import auth from './routes/auth';
 import user from './routes/user';
+import { cors } from 'hono/cors';
 
 const app = new Hono();
+
+app.use(
+  '/*',
+  cors({
+    origin: 'http://localhost:5173'
+  })
+)
 
 app.route('/summary', summary);
 app.route('/incongruence', incongruence);
