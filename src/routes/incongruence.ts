@@ -1,8 +1,10 @@
 import { Ai } from "@cloudflare/ai";
 import { Hono } from "hono";
+import { jwt } from "hono/jwt";
 
 type Env = {
     AI: any;
+    JWT_SECRET: string;
 }
 
 type reqBody = {
@@ -10,9 +12,16 @@ type reqBody = {
     body: string;
 }
 
-const incongruence = new Hono<{ Bindings: Env }>();
+const app = new Hono<{ Bindings: Env }>();
 
-incongruence.post("/", async (c) => {
+app.use('/*', (c, next) => {
+    const jwtMiddleware = jwt({
+        secret: c.env.JWT_SECRET,
+    })
+    return jwtMiddleware(c, next)
+})
+
+app.post("/", async (c) => {
     const { headline, body }: reqBody = await c.req.json();
 
     const ai = new Ai(c.env.AI);
@@ -38,4 +47,4 @@ incongruence.post("/", async (c) => {
     return c.json(response);
 });
 
-export default incongruence;
+export default app;

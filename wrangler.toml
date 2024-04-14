@@ -1,8 +1,10 @@
 name = "verisight-cf"
 compatibility_date = "2023-12-01"
 
-# [vars]
+[vars]
 # MY_VAR = "my-variable"
+TAVILY_API_KEY = "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"
+JWT_SECRET = "my-secret-verisight-jwt"
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
@@ -12,10 +14,10 @@ compatibility_date = "2023-12-01"
 # binding = "MY_BUCKET"
 # bucket_name = "my-bucket"
 
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "my-database"
-# database_id = ""
+[[d1_databases]]
+binding = "DB"
+database_name = "verisight-db"
+database_id = "61624db1-85cb-4f9e-89cb-dad3a25fd377"
 
 [ai]
 binding = "AI"

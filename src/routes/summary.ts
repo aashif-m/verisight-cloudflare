@@ -1,8 +1,10 @@
 import { Hono } from "hono";
 import { Ai } from '@cloudflare/ai'
+import { jwt } from "hono/jwt";
 
 type Env = {
     AI: any;
+    JWT_SECRET: string;
 }
 
 type reqBody = {
@@ -10,9 +12,16 @@ type reqBody = {
     body: string;
 }
 
-const summary = new Hono<{ Bindings: Env }>();
+const app = new Hono<{ Bindings: Env }>();
 
-summary.post("/", async (c) => {
+app.use('/*', (c, next) => {
+    const jwtMiddleware = jwt({
+        secret: c.env.JWT_SECRET,
+    })
+    return jwtMiddleware(c, next)
+})
+
+app.post("/", async (c) => {
     const {headline, body} : reqBody = await c.req.json();
 
     const ai = new Ai(c.env.AI);
@@ -35,4 +44,4 @@ summary.post("/", async (c) => {
 
 })
 
-export default summary;
+export default app;

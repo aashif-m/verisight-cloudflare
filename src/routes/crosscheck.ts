@@ -1,9 +1,11 @@
 import { Ai } from "@cloudflare/ai";
 import { Hono } from "hono";
+import { jwt } from "hono/jwt";
 
 type Env = {
     AI: any;
     TAVILY_API_KEY: string;
+    JWT_SECRET: string;
 }
 
 type reqBody = {
@@ -20,9 +22,16 @@ type tavilyResponse = {
     }[];
 };
 
-const crosscheck = new Hono<{ Bindings: Env }>();
+const app = new Hono<{ Bindings: Env }>();
 
-crosscheck.post("/", async (c) => {
+app.use('/*', (c, next) => {
+    const jwtMiddleware = jwt({
+        secret: c.env.JWT_SECRET,
+    })
+    return jwtMiddleware(c, next)
+})
+
+app.post("/", async (c) => {
     const { headline, body }: reqBody = await c.req.json();
     const ai = new Ai(c.env.AI);
 
@@ -43,7 +52,7 @@ crosscheck.post("/", async (c) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(tavilyOptions),
-    }).then(response => response.json());
+    }).then(response => response.json()) as tavilyResponse;
 
     const getContext = (input: tavilyResponse) => {
         return input.results.map((result) => ({
@@ -87,4 +96,4 @@ crosscheck.post("/", async (c) => {
 
 });
 
-export default crosscheck;
+export default app;
