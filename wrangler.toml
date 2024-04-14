@@ -1,10 +1,9 @@
 name = "verisight-cf"
 compatibility_date = "2023-12-01"
+node_compat = true
 
 [vars]
 # MY_VAR = "my-variable"
-TAVILY_API_KEY = "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"
-JWT_SECRET = "my-secret-verisight-jwt"
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"

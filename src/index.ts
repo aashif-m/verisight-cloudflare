@@ -10,8 +10,8 @@ const app = new Hono();
 app.route('/summary', summary);
 app.route('/incongruence', incongruence);
 app.route('/crosscheck', crosscheck);
-app.route('auth', auth);
-app.route('user', user);
+app.route('/auth', auth);
+app.route('/user', user);
 
 app.get('/', (c) => {
   return c.text('Hello Hono!')
