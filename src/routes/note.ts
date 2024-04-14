@@ -95,6 +95,10 @@ app.get("/:id", async (c) => {
         where: {
             articleId: article.id,
         },
+        select: {
+            id: true,
+            content: true,
+        },
         orderBy: {
             noteVotes: {
                 _count: "desc",
@@ -106,13 +110,13 @@ app.get("/:id", async (c) => {
     return c.json(notes);
 });
 
-app.get("/featured/:link", async (c) => {
-    const link = c.req.param("link");
+app.get("/featured/:id", async (c) => {
+    const id = Number(c.req.param("id"));
     const adapter = new PrismaD1(c.env.DB);
     const prisma = new PrismaClient({ adapter });
     const article = await prisma.article.findUnique({
         where: {
-            link: link,
+            id: id,
         },
     });
 
