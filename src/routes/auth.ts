@@ -71,15 +71,25 @@ app.post("/login", async (c) => {
 
 app.get("/validate", async (c) => {
     const token = c.req.header("Authorization");
+    const adapter = new PrismaD1(c.env.DB);
+    const prisma = new PrismaClient({ adapter });
     if (!token) {
         c.status(401);
         return c.json({ message: "No token provided" });
     }
+    const username = (jwt.decode(token) as { username?: string })?.username;
 
     try {
         const payload = await jwt.verify(token, c.env.JWT_SECRET);
         c.status(200);
-        return c.json({ message: "Token is valid", payload });
+        const user = await prisma.user.findUnique({
+            where: {
+                id: payload.sub,
+            },
+        });
+        if (user) {
+            return c.json({ message: "Token is valid", username });
+        }
     } catch (e) {
         c.status(401);
         return c.json({ message: "Invalid token" });
