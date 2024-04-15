@@ -197,14 +197,14 @@ app.delete("/:id", async (c) => {
 app.post("/vote/:id", async (c) => {
     const id = Number(c.req.param("id"));
     const payload = c.get('jwtPayload');
-    const username = payload.username;
+    const userId = payload.sub;
     const adapter = new PrismaD1(c.env.DB);
     const prisma = new PrismaClient({ adapter });
 
     const vote = await prisma.noteVote.findFirst({
         where: {
             noteId: id,
-            userId: username,
+            userId: userId,
         }
     });
 
