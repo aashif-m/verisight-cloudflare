@@ -142,24 +142,13 @@ app.get("/featured/:id", async (c) => {
 
 app.get("/user/", async (c) => {
     const payload = c.get('jwtPayload');
-    const username = payload.username;
+    const userId = payload.sub;
     const adapter = new PrismaD1(c.env.DB);
     const prisma = new PrismaClient({ adapter });
 
-    const user = await prisma.user.findUnique({
-        where: {
-            username: username,
-        },
-    });
-
-    if (!user) {
-        c.status(404);
-        return c.json({ message: "User not found" });
-    }
-
     const notes = await prisma.note.findMany({
         where: {
-            userId: user.id,
+            userId: userId,
         },
     });
 
