@@ -167,8 +167,10 @@ app.get("/user/", async (c) => {
     return c.json(notes);
 });
 
-app.delete("/:id", async (c) => {
+app.delete("/delete/:id", async (c) => {
     const id = Number(c.req.param("id"));
+    const payload = c.get('jwtPayload');
+    const userId = payload.sub;
 
     const adapter = new PrismaD1(c.env.DB);
     const prisma = new PrismaClient({ adapter });
@@ -176,6 +178,7 @@ app.delete("/:id", async (c) => {
     const note = await prisma.note.findUnique({
         where: {
             id: id,
+            userId: userId,
         },
     });
 
