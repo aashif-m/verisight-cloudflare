@@ -7,7 +7,7 @@
 Before running the Verisight Backend locally, ensure you have the following installed:
 
 - [Bun](https://bun.sh/docs/installation)
-- [TAVILY_API_KEY](https://tavily.com/)
+- [Tavily API](https://tavily.com/)
 
 ## Installation
 
