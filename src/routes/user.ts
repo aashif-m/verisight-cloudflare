@@ -69,6 +69,18 @@ app.delete("/", async (c) => {
         },
     });
 
+    await prisma.note.deleteMany({
+        where: {
+            userId: payload.sub,
+        },
+    });
+
+    await prisma.noteVote.deleteMany({
+        where: {
+            userId: payload.sub,
+        },
+    });
+
     c.status(204);
     return c.json({ message: "User deleted" });
 });
