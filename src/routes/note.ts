@@ -229,4 +229,27 @@ app.post("/vote/:id", async (c) => {
     return c.json({ message: "Vote added", vote: note });
 });
 
+app.get('/isupvoted/:id', async (c) => {
+    const id = Number(c.req.param("id"));
+    const payload = c.get('jwtPayload');
+    const username = payload.username;
+    const adapter = new PrismaD1(c.env.DB);
+    const prisma = new PrismaClient({ adapter });
+
+    const vote = await prisma.noteVote.findFirst({
+        where: {
+            noteId: id,
+            userId: username,
+        }
+    });
+
+    if (vote) {
+        c.status(200);
+        return c.json({ response: true });
+    }
+
+    c.status(200);
+    return c.json({ response: false });
+});
+
 export default app;
