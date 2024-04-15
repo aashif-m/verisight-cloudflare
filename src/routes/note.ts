@@ -221,7 +221,7 @@ app.post("/vote/:id", async (c) => {
     const note = await prisma.noteVote.create({
         data: {
             noteId: id,
-            userId: username,
+            userId: userId,
         }
     });
 
