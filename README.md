@@ -6,7 +6,8 @@
 
 Before running the Verisight Backend locally, ensure you have the following installed:
 
-- [Bun] (https://bun.sh/docs/installation)
+- [Bun](https://bun.sh/docs/installation)
+- [TAVILY_API_KEY](https://tavily.com/)
 
 ## Installation
 
@@ -26,10 +27,6 @@ $  bun  install
 
 $  bun dev
 
-# Production mode
-
-$  bun deploy
-
 ```
 
 ## Secrets and Variables
@@ -39,16 +36,23 @@ The Verisight Backend uses the following environment variables:
 - `JWT_SECRET`
 
 ```bash
-$ bunx wrangler secret put <JWT_SECRET>
+$ bunx wrangler secret put JWT_SECRET
 ``` 
 
 - `TAVILY_API_KEY`
-```
-$ bunx wrangler secret put <TAVILY_API_KEY> (Need the Tavily API Key)
+```bash
+$ bunx wrangler secret put TAVILY_API_KEY
+
 ```
 ## Deployment
 
-The Verisight Backend is deployed using Cloudflare Workers. Any changes pushed to the `main` branch are manually deployed to workers using the production code.
+The Verisight Backend is deployed using Cloudflare Workers.
+    
+```bash
+# Production mode
+
+$  bun deploy
+```
 
 ## License
 
