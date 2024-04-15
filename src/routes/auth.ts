@@ -77,7 +77,7 @@ app.get("/validate", async (c) => {
         c.status(401);
         return c.json({ message: "No token provided" });
     }
-    const username = (jwt.decode(token) as { username?: string })?.username;
+    
 
     try {
         const payload = await jwt.verify(token, c.env.JWT_SECRET);
@@ -88,7 +88,7 @@ app.get("/validate", async (c) => {
             },
         });
         if (user) {
-            return c.json({ message: "Token is valid", username });
+            return c.json({ message: "Token is valid", username: payload.username });
         }
     } catch (e) {
         c.status(401);
