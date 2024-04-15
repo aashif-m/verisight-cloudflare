@@ -44,8 +44,10 @@ app.post("/", async (c) => {
         }];
 
     const response = await ai.run("@hf/thebloke/openhermes-2.5-mistral-7b-awq", { messages });
+    const responseString = response as string;
+    let result = responseString.includes("incongruent") ? "incongruent" : "congruent";
     c.status(201);
-    return c.json(response);
+    return c.json({response: result});
 });
 
 export default app;
