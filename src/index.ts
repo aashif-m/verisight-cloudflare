@@ -26,7 +26,7 @@ app.route('/article', article);
 app.route('/note', note)
 
 app.get('/', (c) => {
-  return c.text('Hello Hono!')
+  return c.text('Hi there! Download our extension at https://chromewebstore.google.com/detail/verisight/hakkkgoancaobbmlmngfclkdggkdnolk ')
 });
 
 export default app;
