@@ -33,6 +33,7 @@ app.use('/*', (c, next) => {
 
 app.post("/", async (c) => {
     const { headline, body }: reqBody = await c.req.json();
+    let shortenedBody = body.substring(0, 5700);
     const ai = new Ai(c.env.AI);
 
     const tavilyOptions = {
@@ -82,7 +83,7 @@ app.post("/", async (c) => {
                 "The article is about " +
                 headline +
                 " and the content is " +
-                body +
+                shortenedBody +
                 ".",
         },
     ];

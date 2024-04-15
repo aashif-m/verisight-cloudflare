@@ -23,6 +23,7 @@ app.use('/*', (c, next) => {
 
 app.post("/", async (c) => {
     const {headline, body} : reqBody = await c.req.json();
+    let shortenedBody = body.substring(0, 5700);
 
     const ai = new Ai(c.env.AI);
 
@@ -33,7 +34,7 @@ app.post("/", async (c) => {
         },
         {
             role: "user",
-            content: "Headline: " + headline + "\nBody: " + body
+            content: "Headline: " + headline + "\nBody: " + shortenedBody
         },
     ];
 
