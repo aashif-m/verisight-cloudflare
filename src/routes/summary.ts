@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { Ai } from '@cloudflare/ai'
 import { jwt } from "hono/jwt";
 
 type Env = {
@@ -25,8 +24,6 @@ app.post("/", async (c) => {
     const {headline, body} : reqBody = await c.req.json();
     let shortenedBody = body.substring(0, 5700);
 
-    const ai = new Ai(c.env.AI);
-
     const messages = [
         {
             role: "system",
@@ -39,7 +36,7 @@ app.post("/", async (c) => {
     ];
 
 
-    const response = await ai.run("@hf/thebloke/openhermes-2.5-mistral-7b-awq", {messages});
+    const response = await c.env.AI.run("@cf/meta/llama-3-8b-instruct", {messages});
     c.status(201);
     return c.json(response);
 

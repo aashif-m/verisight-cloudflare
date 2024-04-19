@@ -1,4 +1,3 @@
-import { Ai } from "@cloudflare/ai";
 import { Hono } from "hono";
 import { jwt } from "hono/jwt";
 
@@ -25,8 +24,6 @@ app.post("/", async (c) => {
     const { headline, body }: reqBody = await c.req.json();
     let shortenedBody = body.substring(0, 5700);
 
-    const ai = new Ai(c.env.AI);
-
     const messages = [
         {
             role: "system",
@@ -43,7 +40,7 @@ app.post("/", async (c) => {
             content: "Headline: " + headline + "\nBody: " + shortenedBody,
         }];
 
-    const response = await ai.run("@hf/thebloke/openhermes-2.5-mistral-7b-awq", { messages });
+    const response = await c.env.AI.run("@cf/meta/llama-3-8b-instruct", { messages });
     const responseString = String(response);
     let result = responseString.includes("incongruent") ? "incongruent" : "congruent";
     c.status(201);
