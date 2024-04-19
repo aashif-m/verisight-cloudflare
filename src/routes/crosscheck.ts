@@ -54,10 +54,7 @@ app.post("/", async (c) => {
     }).then(response => response.json()) as tavilyResponse;
 
     const getContext = (input: tavilyResponse) => {
-        return input.results.map((result) => ({
-            role: "system",
-            content: `Article title: ${result.title}\nArticle Snippet: ${result.content}`
-        }));
+        return input.results.map((result) => `Article title: ${result.title}\nArticle Snippet: ${result.content}`).join('\n');
     }
 
     const getSources = (input: tavilyResponse) => {
@@ -69,22 +66,16 @@ app.post("/", async (c) => {
     const sources = getSources(webResults);
 
     const messages = [
-        ...context,
         {
             role: "system",
-            content:
-                "You are a helpful assistant that checks if the article has inconsistencies with the sources provided and returns a crosscheck report.",
+            content: context + "\nYou are a helpful assistant that checks if the article has inconsistencies with the sources provided and returns a crosscheck report.",
         },
         {
             role: "user",
-            content:
-                "The article is about " +
-                headline +
-                " and the content is " +
-                shortenedBody +
-                ".",
+            content: "Context from other sources: \n" + context + "The article you are checking is: \nHeadline: " + headline + "\nBody: " + shortenedBody + "\n\nPlease crosscheck the article with the sources provided.",
         },
     ];
+
 
     const response = await c.env.AI.run("@cf/meta/llama-3-8b-instruct", {messages});
     c.status(201);
