@@ -32,7 +32,7 @@ app.use('/*', (c, next) => {
 
 app.post("/", async (c) => {
     const { headline, body }: reqBody = await c.req.json();
-    let shortenedBody = body.substring(0, 5700);
+    let shortenedBody = body.substring(0, 5000);
 
     const tavilyOptions = {
         "api_key": c.env.TAVILY_API_KEY,
@@ -41,7 +41,7 @@ app.post("/", async (c) => {
         "include_answer": false,
         "include_images": false,
         "include_raw_content": false,
-        "max_results": 5,
+        "max_results": 3,
         "exclude_domains": ['twitter.com', 'facebook.com', 'instagram.com', 'reddit.com', 'x.com']
     };
 
@@ -68,7 +68,7 @@ app.post("/", async (c) => {
     const messages = [
         {
             role: "system",
-            content: context + "\nYou are a helpful assistant that checks if the article has inconsistencies with the sources provided and returns a crosscheck report.",
+            content: context + "You are a helpful assistant that checks if the article has inconsistencies with the sources provided and returns a crosscheck report.",
         },
         {
             role: "user",
