@@ -15,12 +15,12 @@ type reqBody = {
 
 const app = new Hono<{ Bindings: Env }>();
 
-// app.use('/*', (c, next) => {
-//     const jwtMiddleware = jwt({
-//         secret: c.env.JWT_SECRET,
-//     })
-//     return jwtMiddleware(c, next)
-// })
+app.use('/*', (c, next) => {
+    const jwtMiddleware = jwt({
+        secret: c.env.JWT_SECRET,
+    })
+    return jwtMiddleware(c, next)
+})
 
 app.post("/", async (c) => {
     const {headline, body} : reqBody = await c.req.json();
@@ -59,10 +59,12 @@ app.post("/", async (c) => {
     model: model
     });
 
-    const response = completion.choices[0].message.content;
+    const summary = completion.choices[0].message.content;
     
     c.status(201);
-    return c.json(response);
+    return c.json({
+        response: summary
+    });
 
 })
 
