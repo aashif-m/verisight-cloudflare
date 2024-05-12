@@ -9,7 +9,7 @@ type Env = {
 type reqBody = {
     title: string,
     link: string,
-    publishedTime: string
+    publishedTime: Date
 }
 
 const app = new Hono<{ Bindings: Env }>();
@@ -37,7 +37,7 @@ app.put("/", async (c) => {
             data: {
                 title: title,
                 link: link,
-                publishedTime: publishedTime
+                publishedTime: publishedTimeDate
             }
         });
     }
