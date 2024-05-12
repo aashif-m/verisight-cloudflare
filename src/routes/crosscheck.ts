@@ -1,10 +1,12 @@
 import { Hono } from "hono";
 import { jwt } from "hono/jwt";
+import OpenAI from "openai";
 
 type Env = {
     AI: any;
     TAVILY_API_KEY: string;
     JWT_SECRET: string;
+    AZURE_OPENAI_API_KEY: string;
 }
 
 type reqBody = {
@@ -32,7 +34,6 @@ app.use('/*', (c, next) => {
 
 app.post("/", async (c) => {
     const { headline, body }: reqBody = await c.req.json();
-    let shortenedBody = body.substring(0, 5000);
 
     const tavilyOptions = {
         "api_key": c.env.TAVILY_API_KEY,
@@ -53,8 +54,11 @@ app.post("/", async (c) => {
         body: JSON.stringify(tavilyOptions),
     }).then(response => response.json()) as tavilyResponse;
 
+    console.log(webResults);
+
     const getContext = (input: tavilyResponse) => {
-        return input.results.map((result) => `Article title: ${result.title}\nArticle Snippet: ${result.content}`).join('\n');
+        const context = input.results.map((result) => `Article title: ${result.title}\nArticle Snippet: ${result.content}`).join('\n');
+        return context;
     }
 
     const getSources = (input: tavilyResponse) => {
@@ -72,15 +76,37 @@ app.post("/", async (c) => {
         },
         {
             role: "user",
-            content: "Context from other sources: \n" + context + "The article you are checking is: \nHeadline: " + headline + "\nBody: " + shortenedBody + "\n\nPlease crosscheck the article with the sources provided.",
+            content: "Context from other sources: \n" + context + "The article you are checking is: \nHeadline: " + headline + "\nBody: " + body + "\n\nPlease crosscheck the article with the sources provided.",
         },
     ];
 
+    // Disabling cloudflare AI until higher context limits are announced
+    // const response = await c.env.AI.run("@cf/meta/llama-3-8b-instruct", {messages});
 
-    const response = await c.env.AI.run("@cf/meta/llama-3-8b-instruct", {messages});
+    // Back to OpenAI :)
+    const resource = 'verisightgptapi'; //without the .openai.azure.com
+    const model = 'Verisight-gpt35-turbo-1106';
+    const apiVersion = '2024-02-15-preview';
+    const apiKey = c.env.AZURE_OPENAI_API_KEY;
+
+
+    const azure_openai = new OpenAI({
+        apiKey: apiKey,
+        baseURL: `https://gateway.ai.cloudflare.com/v1/242f6efe1a95baaf1fbdfef2f3d0654c/crosscheck/azure-openai/${resource}/${model}`,
+        defaultQuery: { 'api-version': apiVersion },
+        defaultHeaders: { 'api-key': apiKey },
+    });
+
+    const completion = await azure_openai.chat.completions.create({
+        messages: messages,
+        model: model
+    });
+
+    const crosscheck = completion.choices[0].message.content;
+
     c.status(201);
     return c.json({
-        ...response,
+        response: crosscheck,
         ...sources
     });
 

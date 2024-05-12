@@ -24,7 +24,6 @@ app.use('/*', (c, next) => {
 
 app.post("/", async (c) => {
     const { headline, body }: reqBody = await c.req.json();
-    let shortenedBody = body.substring(0, 5700);
 
     const messages = [
         {
@@ -38,7 +37,7 @@ app.post("/", async (c) => {
         },
         {
             role: "user",
-            content: "Headline: " + headline + "\nBody: " + shortenedBody,
+            content: "Headline: " + headline + "\nBody: " + body,
         }];
 
     // const response = await c.env.AI.run("@cf/meta/llama-3-8b-instruct", { messages });
@@ -53,7 +52,7 @@ app.post("/", async (c) => {
 
     const azure_openai = new OpenAI({
         apiKey: apiKey,
-        baseURL: `https://gateway.ai.cloudflare.com/v1/242f6efe1a95baaf1fbdfef2f3d0654c/summary/azure-openai/${resource}/${model}`,
+        baseURL: `https://gateway.ai.cloudflare.com/v1/242f6efe1a95baaf1fbdfef2f3d0654c/incongruence/azure-openai/${resource}/${model}`,
         defaultQuery: { 'api-version': apiVersion },
         defaultHeaders: { 'api-key': apiKey },
     });
