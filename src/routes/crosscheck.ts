@@ -12,6 +12,7 @@ type Env = {
 type reqBody = {
     headline: string;
     body: string;
+    url: string;
 }
 
 type tavilyResponse = {
@@ -33,7 +34,8 @@ app.use('/*', (c, next) => {
 })
 
 app.post("/", async (c) => {
-    const { headline, body }: reqBody = await c.req.json();
+    const { headline, body, url }: reqBody = await c.req.json();
+    const urlHostname = new URL(url).hostname;
 
     const tavilyOptions = {
         "api_key": c.env.TAVILY_API_KEY,
@@ -43,7 +45,7 @@ app.post("/", async (c) => {
         "include_images": false,
         "include_raw_content": false,
         "max_results": 3,
-        "exclude_domains": ['twitter.com', 'facebook.com', 'instagram.com', 'reddit.com', 'x.com']
+        "exclude_domains": ['twitter.com', 'facebook.com', 'instagram.com', 'reddit.com', 'x.com', 'youtube.com', urlHostname],
     };
 
     const webResults: tavilyResponse = await fetch('https://api.tavily.com/search', {
