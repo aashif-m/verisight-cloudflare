@@ -74,7 +74,7 @@ app.post("/", async (c) => {
     const messages = [
         {
             role: "system",
-            content: context + "You are a helpful assistant that checks if the article has inconsistencies with the sources provided and returns a crosscheck report. If there are no context provided, say that you are unable to crosscheck the article.",
+            content: context + "You are a helpful assistant that checks if the article has inconsistencies with the sources provided and returns a crosscheck report. If there are no context provided, say that you are unable to crosscheck the article. The report should just be text without any formatting or markdown applied.",
         },
         {
             role: "user",

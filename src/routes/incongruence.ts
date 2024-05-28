@@ -33,6 +33,8 @@ app.post("/", async (c) => {
 
           1. "congruent" - if the body text is congruent with the headline.
           2. "incongruent" - if the body text is incongruent with the headline.
+
+          The key should be "result"
           `,
         },
         {
