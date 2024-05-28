@@ -87,7 +87,7 @@ app.post("/", async (c) => {
 
     // Back to OpenAI :)
     const resource = 'verisightgptapi'; //without the .openai.azure.com
-    const model = 'Verisight-gpt35-turbo-1106';
+    const model = 'verisight-gpt4o';
     const apiVersion = '2024-02-15-preview';
     const apiKey = c.env.AZURE_OPENAI_API_KEY;
 
