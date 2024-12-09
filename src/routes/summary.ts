@@ -37,34 +37,31 @@ app.post("/", async (c) => {
     ];
 
 
-    // Disabled Cloudflare AI until higher context limits are announced
-    // const response = await c.env.AI.run("@cf/meta/llama-3-8b-instruct", {messages});
+    const response = await c.env.AI.run("@cf/meta/llama-3.3-70b-instruct-fp8-fast", {messages});
 
     // Back to OpenAI :)
-    const resource = 'verisightgptapi'; //without the .openai.azure.com
-    const model = 'verisight-gpt4o';
-    const apiVersion = '2024-02-15-preview';
-    const apiKey = c.env.AZURE_OPENAI_API_KEY;
+    // const resource = 'verisightgptapi'; //without the .openai.azure.com
+    // const model = 'verisight-gpt4o';
+    // const apiVersion = '2024-02-15-preview';
+    // const apiKey = c.env.AZURE_OPENAI_API_KEY;
   
 
-    const azure_openai = new OpenAI({
-        apiKey: apiKey,
-        baseURL: `https://gateway.ai.cloudflare.com/v1/242f6efe1a95baaf1fbdfef2f3d0654c/summary/azure-openai/${resource}/${model}`,
-        defaultQuery: { 'api-version': apiVersion },
-        defaultHeaders: { 'api-key': apiKey },
-      });
+    // const azure_openai = new OpenAI({
+    //     apiKey: apiKey,
+    //     baseURL: `https://gateway.ai.cloudflare.com/v1/242f6efe1a95baaf1fbdfef2f3d0654c/summary/azure-openai/${resource}/${model}`,
+    //     defaultQuery: { 'api-version': apiVersion },
+    //     defaultHeaders: { 'api-key': apiKey },
+    //   });
 
-    const completion = await azure_openai.chat.completions.create({
-    messages: messages,
-    model: model
-    });
+    // const completion = await azure_openai.chat.completions.create({
+    // messages: messages,
+    // model: model
+    // });
 
-    const summary = completion.choices[0].message.content;
+    // const summary = completion.choices[0].message.content;
     
     c.status(201);
-    return c.json({
-        response: summary
-    });
+    return c.json(response);
 
 })
 

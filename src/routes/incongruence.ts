@@ -42,36 +42,34 @@ app.post("/", async (c) => {
             content: "Headline: " + headline + "\nBody: " + body,
         }];
 
-    // const response = await c.env.AI.run("@cf/meta/llama-3-8b-instruct", { messages });
-    // const responseString = String(response);
-    // let result = responseString.includes("incongruent") ? "incongruent" : "congruent";
+    const response = await c.env.AI.run("@cf/meta/llama-3-8b-@cf/meta/llama-3.3-70b-instruct-fp8-fast", { messages });
+    const responseString = String(response);
+    let result = responseString.includes("incongruent") ? "incongruent" : "congruent";
 
     // Back to OpenAI :)
-    const resource = 'verisightgptapi'; //without the .openai.azure.com
-    const model = 'verisight-gpt4o';
-    const apiVersion = '2024-02-15-preview';
-    const apiKey = c.env.AZURE_OPENAI_API_KEY;
+    // const resource = 'verisightgptapi'; //without the .openai.azure.com
+    // const model = 'verisight-gpt4o';
+    // const apiVersion = '2024-02-15-preview';
+    // const apiKey = c.env.AZURE_OPENAI_API_KEY;
 
-    const azure_openai = new OpenAI({
-        apiKey: apiKey,
-        baseURL: `https://gateway.ai.cloudflare.com/v1/242f6efe1a95baaf1fbdfef2f3d0654c/incongruence/azure-openai/${resource}/${model}`,
-        defaultQuery: { 'api-version': apiVersion },
-        defaultHeaders: { 'api-key': apiKey },
-    });
+    // const azure_openai = new OpenAI({
+    //     apiKey: apiKey,
+    //     baseURL: `https://gateway.ai.cloudflare.com/v1/242f6efe1a95baaf1fbdfef2f3d0654c/incongruence/azure-openai/${resource}/${model}`,
+    //     defaultQuery: { 'api-version': apiVersion },
+    //     defaultHeaders: { 'api-key': apiKey },
+    // });
 
-    const completion = await azure_openai.chat.completions.create({
-        messages: messages,
-        model: model,
-        response_format: { type: "json_object" }
-    });
+    // const completion = await azure_openai.chat.completions.create({
+    //     messages: messages,
+    //     model: model,
+    //     response_format: { type: "json_object" }
+    // });
 
-    // parse json from completion 
-    const { result } = JSON.parse(completion.choices[0].message.content);
+    // // parse json from completion 
+    // const { result } = JSON.parse(completion.choices[0].message.content);
 
     c.status(201);
-    return c.json({
-        response: result
-    });
+    return c.json({ response: result });
 });
 
 export default app;
